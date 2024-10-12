@@ -11,7 +11,6 @@ const userSchema = Joi.object({
     terms: Joi.boolean().required().valid(true)
 });
 
-
 const validateForm = (req, res, next) => {
     const { error, value } = userSchema.validate(req.body);
     if (error) {
