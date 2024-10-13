@@ -56,4 +56,32 @@ const validateForm = (req, res, next) => {
 };
 
 
-module.exports = validateForm;
+
+
+
+const userSchemalogin = Joi.object({
+
+    
+    email: Joi.string().email().required().messages({
+        'string.empty': 'Pleas Enter Your Email.',
+        'string.email': 'Invalid Your Email .',
+    }),
+
+    password: Joi.string().required().messages({
+        'string.empty': 'Pleas Enter Your Password.',
+    }),
+
+});
+
+const validateFormLogin = (req, res, next) => {
+    const { error, value } = userSchemalogin.validate(req.body);
+    if (error) {
+        return res.status(409).json({ error: error.details[0].message });
+    } else {
+        next();
+    }
+
+
+};
+
+module.exports = { validateForm, validateFormLogin };
