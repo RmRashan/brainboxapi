@@ -16,7 +16,12 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
-
+app.ge6("/", (req, res) => {
+    res.send('Hello, World!');
+});
+app.get("/sss", (req, res) => {
+    res.send('Hello,www!');
+});
 
 app.use("/api/auth", authRoute);
 
