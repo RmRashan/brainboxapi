@@ -18,9 +18,6 @@ app.use(bodyParser.json());
 
 
 
-app.use("/", (req, res) => {
-    res.send('Hello, World!');
-});
 app.use("/api/auth", authRoute);
 
 app.listen(3000, () => {
