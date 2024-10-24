@@ -10,7 +10,7 @@ const userTypes = [
   'higher-education',
   'agent'
 ];
-const userSchema = Joi.object({
+const otherUserSchema = Joi.object({
     firstName: Joi.string().required().messages({
         'string.empty': 'Pleas Enter Your First Name.',
     }),  
@@ -33,20 +33,17 @@ const userSchema = Joi.object({
         'string.empty': 'Pleas Enter Your Password.',
         'any.only': 'Password does not match !.',
     }),   
-    promoCode: Joi.string().allow('').optional(),  
 
     terms: Joi.boolean().required().valid().messages({
         'boolean.base': 'Pleas agree tearms & condtions.',
     }),  
     userType: Joi.string().required().valid(...Object.values(userTypes)), 
-    // paymentReceipt: Joi.string().required().allow(/^image\/(jpeg|jpg|png|gif|webp)$/).messages({
-    //     'any.required': 'Pleas Select Payment Receipt.',
-    // }),
+
 });
 
-export const validateForm = (req, res, next) => {
+export const otherValidateFormRegistration = (req, res, next) => {
     console.log(req.body);
-    const { error, value } = userSchema.validate(req.body);
+    const { error, value } = otherUserSchema.validate(req.body);
     if (error) {
         return res.json({ error: error.details[0].message });
     } else {
@@ -57,7 +54,7 @@ export const validateForm = (req, res, next) => {
 };
 
 
-const userSchemalogin = Joi.object({
+const otherUserSchemalogin = Joi.object({
 
     
     email: Joi.string().email().required().messages({
@@ -71,10 +68,10 @@ const userSchemalogin = Joi.object({
 
 });
 
-export const validateFormLogin = (req, res, next) => {
+export const otherValidateFormLogin = (req, res, next) => {
     console.log(req.body)
 
-    const { error, value } = userSchemalogin.validate(req.body.form);
+    const { error, value } = otherUserSchemalogin.validate(req.body.form);
     if (error) {
         return res.status(409).json({ error: error.details[0].message });
     } else {
@@ -85,4 +82,4 @@ export const validateFormLogin = (req, res, next) => {
 };
 
 
-export default { validateForm, validateFormLogin };
+export default { otherValidateFormRegistration, otherValidateFormLogin };
