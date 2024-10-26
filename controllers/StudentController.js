@@ -227,7 +227,7 @@ export const studentProfile = async (req, res) => {
     }
 };
 
-export const studentProfileEdite = async (req, res) => {
+export const studentProfileEdit = async (req, res) => {
     try {
         const id = await req.user;
         const { firstName, lastName, mobile, nameCertificate, address, zipcode, birth, middle_name } = req.body

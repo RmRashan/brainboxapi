@@ -4,7 +4,10 @@ import cors from "cors";
 import multer from "multer";
 import connection from "./utils/DBConnection.js";
 import ProtectRoute from "./middleware/Auth/protectRoute.js";
-import { studentAuthRoute, studentRoute } from "./routes/student/Student.Route.js";
+import {
+  studentAuthRoute,
+  studentRoute,
+} from "./routes/student/Student.Route.js";
 import GradeRoute from "./routes/Grade.Rote.js";
 import GenderRoute from "./routes/Gender.Rote.js";
 
@@ -17,18 +20,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/'); // Specify the destination folder   
-
+    cb(null, "uploads/"); // Specify the destination folder
   },
   filename: (req, file, cb) => {
-    cb(null,
-      Date.now() + '-' + file.originalname); // Generate a unique filename
-  }
+    cb(null, Date.now() + "-" + file.originalname); // Generate a unique filename
+  },
 });
 const upload = multer({ storage: storage });
-app.use(upload.array('files')); 
-
-
+app.use(upload.array("files"));
 
 /* ROUTES */
 
@@ -43,12 +42,8 @@ app.use("/api/grade", GradeRoute);
 // -------------------------------------------------****** get gender ******
 app.use("/api/gender", GenderRoute);
 
-
 // check user session
 app.use("/api/auth", ProtectRoute);
-
-
-
 
 /* MYSQL SETUP */
 const PORT = 8000 || 9000;
