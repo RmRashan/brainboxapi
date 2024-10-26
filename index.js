@@ -1,26 +1,57 @@
 import express from "express";
 import bodyParser from "body-parser";
-
 import cors from "cors";
-
-import authRoutes from "./routes/auth.js";
+import multer from "multer";
 import connection from "./utils/DBConnection.js";
+import ProtectRoute from "./middleware/Auth/protectRoute.js";
+import { studentAuthRoute, studentRoute } from "./routes/student/Student.Route.js";
+import GradeRoute from "./routes/Grade.Rote.js";
+import GenderRoute from "./routes/Gender.Rote.js";
 
 /* CONFIGURATION */
 const app = express();
 app.use(cors());
-
 app.use(express.json());
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); // Specify the destination folder   
+
+  },
+  filename: (req, file, cb) => {
+    cb(null,
+      Date.now() + '-' + file.originalname); // Generate a unique filename
+  }
+});
+const upload = multer({ storage: storage });
+app.use(upload.array('files')); 
+
+
+
 /* ROUTES */
 
-app.use("/api/auth", authRoutes);
+// -------------------------------------------------****** student ******
+app.use("/api/auth/student", studentAuthRoute);
+app.use("/api/student", studentRoute);
+// -------------------------------------------------****** agent ******
+app.use("/api/auth/agent", studentAuthRoute);
+app.use("/api/agent", studentRoute);
+// -------------------------------------------------****** get grades ******
+app.use("/api/grade", GradeRoute);
+// -------------------------------------------------****** get gender ******
+app.use("/api/gender", GenderRoute);
+
+
+// check user session
+app.use("/api/auth", ProtectRoute);
+
+
+
 
 /* MYSQL SETUP */
-const PORT = 5000 || 9000;
+const PORT = 8000 || 9000;
 async function startServer() {
   try {
     connection.connect(function (err) {

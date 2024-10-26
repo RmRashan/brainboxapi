@@ -9,14 +9,12 @@ export const studentLogin = async (req, res) => {
 
     // mysql query bind = email
     var emailq = { email: email };
-    console.log(email, password);
+    // console.log(emailq)
 
-    connection.query("SELECT * FROM users WHERE ?", emailq, (err, results) => {
+    connection.query("SELECT * FROM students WHERE ?", emailq, (err, results) => {
       if (err) {
-        console.error("DBerror executing query:", err);
-        return res
-          .status(500)
-          .json({ DBerror: "Error executing query:" + err });
+        console.error("DBerror executing query:"+ err);
+       
       }
 
       if (results.length === 0) {
@@ -28,11 +26,11 @@ export const studentLogin = async (req, res) => {
       // Compare passwords using bcrypt
       bcryptjs.compare(password, user.password, (err, isMatch) => {
         if (err) {
-          res.status(500).json({ error: "bcryptjs :" + err });
+          console.error("bcryptjs :" + err)
         }
         if (isMatch) {
-          genarateToken(user._id, res);
-          return res.status(200).json({ success: "Login successfull !" });
+          const token = genarateToken(user.id, password, res);
+          return res.status(200).json({ success: "Login successfull !", token: token });
         } else {
           // Invalid password
           res.status(401).json({ error: "Invalid email or password" });
@@ -41,7 +39,6 @@ export const studentLogin = async (req, res) => {
     });
   } catch (error) {
     console.log("login controller" + error.message);
-    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -51,8 +48,7 @@ export const agentLogin = async (req, res) => {
 
     // mysql query bind = email
     var emailq = { email: email };
-    console.log(email, password);
-
+  
     connection.query("SELECT * FROM users WHERE ?", emailq, (err, results) => {
       if (err) {
         console.error("DBerror executing query:", err);
@@ -73,7 +69,9 @@ export const agentLogin = async (req, res) => {
           res.status(500).json({ error: "bcryptjs :" + err });
         }
         if (isMatch) {
-          genarateToken(user._id, res);
+         const cokkie = genarateToken(user._id, res);
+
+          console.log(cokkie)
           return res.status(200).json({ success: "Login successfull !" });
         } else {
           // Invalid password

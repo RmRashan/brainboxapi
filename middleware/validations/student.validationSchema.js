@@ -1,14 +1,11 @@
 import Joi from "joi";
 
 const userTypes = [
-  "admin",
-  "staff",
-  "instructor",
+
   "student",
-  "higher-education",
-  "agent",
+
 ];
-const studentSchema = Joi.object({
+const studentRegistrationSchema = Joi.object({
   firstName: Joi.string().required().messages({
     "string.empty": "Pleas Enter Your First Name.",
   }),
@@ -28,6 +25,12 @@ const studentSchema = Joi.object({
       "string.empty": "Pleas Enter Your Mobile Number.",
       "string.pattern.base": "Invalid Sri Lanka Number.",
     }),
+  grade: Joi.string().required().messages({
+    "string.empty": "Pleas Select Grade.",
+  }),
+  gender: Joi.string().required().messages({
+    "string.empty": "Pleas Select Gender.",
+  }),
   password: Joi.string().min(8).required().messages({
     "string.empty": "Pleas Enter Your Password.",
     "string.min": "Password should have a minimum length of 8 .",
@@ -53,8 +56,7 @@ const studentSchema = Joi.object({
 });
 
 export const studentValidateFormRegistration = (req, res, next) => {
-  console.log(req.body);
-  const { error, value } = studentSchema.validate(req.body);
+  const { error, value } = studentRegistrationSchema.validate(req.body);
   if (error) {
     return res.json({ error: error.details[0].message });
   } else {
@@ -74,7 +76,6 @@ const studentSchemalogin = Joi.object({
 });
 
 export const studentValidateFormLogin = (req, res, next) => {
-  console.log(req.body);
 
   const { error, value } = studentSchemalogin.validate(req.body.form);
   if (error) {
